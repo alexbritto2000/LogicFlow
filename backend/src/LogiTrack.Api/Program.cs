@@ -7,8 +7,13 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
+using Azure.Storage;
+using Azure.Storage.Blobs;
+using LogiTrack.Api.CloudServices.Interface;
 
 var builder = WebApplication.CreateBuilder(args);
+var accountName = builder.Configuration["AzureBlob:AccountName"];
+var accountKey = builder.Configuration["AzureBlob:AccountKey"];
 
 // Add Controllers
 builder.Services.AddControllers();
@@ -35,6 +40,15 @@ builder.Services.AddScoped<IDashboardService, DashboardService>();
 builder.Services.AddScoped<IReportService, ReportService>();
 builder.Services.AddScoped<INotificationService, NotificationService>();
 builder.Services.AddScoped<IUserService, UserService>();
+
+//builder.Services.AddScoped<IContainerService, ContainerService>();
+builder.Services.AddScoped(x =>
+{
+    var cerdential = new StorageSharedKeyCredential(accountName, accountKey);
+    var blobUrl = new Uri($"https://{accountName}.blob.core.windows.net");
+
+    return new BlobServiceClient(blobUrl, cerdential);
+});
 
 // OpenAPI
 builder.Services.AddOpenApi();
