@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/LogiTrack.Api/LogiTrack.Api.csproj" />
+    <Project Path="src/LogiTrack.Application/LogiTrack.Application.csproj" />
+    <Project Path="src/LogiTrack.Domain/LogiTrack.Domain.csproj" />
+    <Project Path="src/LogiTrack.Infrastructure/LogiTrack.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/LogiTrack.Tests/LogiTrack.Tests.csproj" />
+  </Folder>
+</Solution>

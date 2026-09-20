@@ -1,0 +1,67 @@
+services:
+  # Database Service (SQL Server 2022)
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: logitrack-db
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=LogiTrack@Secure2026!
+      - MSSQL_PID=Express
+    ports:
+      - "1433:1433"
+    volumes:
+      - logitrack_db_data:/var/opt/mssql
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P 'LogiTrack@Secure2026!' -C -Q 'SELECT 1' || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    networks:
+      - logitrack-network
+
+  # Backend Web API (.NET 10)
+  logitrack-api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: logitrack-api
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ConnectionStrings__DefaultConnection=Server=db,1433;Database=LogiTrackDb;User Id=sa;Password=LogiTrack@Secure2026!;TrustServerCertificate=True;MultipleActiveResultSets=true
+      - JwtSettings__SecretKey=LogiTrackSuperSecureSecretKeyForJwtAuthentication2026!#
+      - JwtSettings__Issuer=LogiTrackApi
+      - JwtSettings__Audience=LogiTrackClient
+      - Cors__AllowedOrigins__0=http://localhost
+      - Cors__AllowedOrigins__1=http://localhost:3000
+      - Cors__AllowedOrigins__2=http://localhost:5173
+    ports:
+      - "5000:5000"
+    volumes:
+      - logitrack_uploads:/app/Uploads
+    networks:
+      - logitrack-network
+
+  # Frontend Web Client (React + Nginx)
+  logitrack-ui:
+    build:
+      context: ./frontend/logitrack-ui
+      dockerfile: Dockerfile
+    container_name: logitrack-ui
+    depends_on:
+      - logitrack-api
+    ports:
+      - "80:80"
+    networks:
+      - logitrack-network
+
+volumes:
+  logitrack_db_data:
+  logitrack_uploads:
+
+networks:
+  logitrack-network:
+    driver: bridge
