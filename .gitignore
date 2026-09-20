@@ -1,0 +1,73 @@
+# =========================
+# Visual Studio
+# =========================
+.vs/
+**/.vs/
+
+# Visual Studio user-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# =========================
+# .NET / C#
+# =========================
+bin/
+obj/
+
+# NuGet
+packages/
+*.nupkg
+*.snupkg
+
+# ASP.NET Core
+wwwroot/lib/
+
+# .NET logs
+*.log
+
+# Test results
+TestResults/
+*.trx
+
+# =========================
+# React / Node
+# =========================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Build output
+dist/
+build/
+
+# Vite
+.vite/
+
+# =========================
+# Environment / Secrets
+# =========================
+.env
+.env.*
+!.env.example
+
+# =========================
+# OS generated files
+# =========================
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# =========================
+# IDE
+# =========================
+.vscode/
+.idea/
+
+# .NET configuration
+**/appsettings.json
+**/appsettings.Development.json
+**/appsettings.Local.json
